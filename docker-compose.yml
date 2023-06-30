@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  application:
+    image: code-challenge
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: application
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/code_challenge
+      SQS_ENDPOINT_CONFIGURATION: http://event-queues:4566
+    ports:
+      - 8000:8080
+    restart: always
+    depends_on:
+    - database
+    - event-queues
+  database:
+    image: mysql:5.7
+    platform: linux/amd64
+    ports:
+      - 3310:3306
+    container_name: database
+    environment:
+      - MYSQL_ROOT_PASSWORD=adminpassword
+      - MYSQL_DATABASE=code_challenge
+      - MYSQL_USER=codechallengeuser
+      - MYSQL_PASSWORD=codechallengepassword
+  event-queues:
+    image: localstack/localstack
+    ports:
+      - 4566:4566
+    container_name: event-queues
+    environment:
+      - SERVICES=sqs
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOSTNAME_EXTERNAL=localstack
+    volumes:
+      - ./sqs_setup:/etc/localstack/init/ready.d
+      - /tmp/localstack:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+
