@@ -1,0 +1,9 @@
+target/classes/application.properties
+target/classes/com/example/template/Application.class
+target/classes/com/example/template/api/UserApiModel.class
+target/classes/com/example/template/api/UserRestController.class
+target/classes/com/example/template/config/AWSConfig.class
+target/classes/com/example/template/models/User.class
+target/classes/com/example/template/models/UserRepository.class
+target/classes/com/example/template/services/SqsService.class
+target/classes/com/example/template/tasks/ReadEventsTask.class
