@@ -48,7 +48,7 @@ public class JsonMessageParserTests {
         assertTrue(result.get(0) instanceof Session);
         assertEquals("asfla-asdf-asdfa", ((Session)result.get(0)).getSessionId());
         assertEquals("2343-asdf-fads", ((Session)result.get(0)).getMachineId());
-        assertEquals(new Timestamp(1688057249), ((Session)result.get(0)).getStartAt());
+        assertEquals(new Timestamp(1688057249000L), ((Session)result.get(0)).getStartAt());
     }
 
     @Test
@@ -66,11 +66,11 @@ public class JsonMessageParserTests {
         assertTrue(result.get(1) instanceof Event);
         assertEquals("asfla-asdf-asdfa", ((Event)result.get(0)).getSessionId());
         assertEquals("drivenDistance", ((Event)result.get(0)).getEventType());
-        assertEquals(new Timestamp(1688057249), ((Event)result.get(0)).getEventAt());
+        assertEquals(new Timestamp(1688057249000L), ((Event)result.get(0)).getEventAt());
         assertEquals(new BigDecimal("123.34"), ((Event)result.get(0)).getEventValue());
         assertEquals("asfla-asdf-asdfa", ((Event)result.get(1)).getSessionId());
         assertEquals("consumedFuel", ((Event)result.get(1)).getEventType());
-        assertEquals(new Timestamp(1688058249), ((Event)result.get(1)).getEventAt());
+        assertEquals(new Timestamp(1688058249000L), ((Event)result.get(1)).getEventAt());
         assertEquals(new BigDecimal("2.7812"), ((Event)result.get(1)).getEventValue());
     }
 }

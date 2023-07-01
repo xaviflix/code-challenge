@@ -14,20 +14,23 @@ public class SessionService {
     private static final Logger LOGGER = LoggerFactory.getLogger(SessionService.class);
     private final SessionRepository sessionRepository;
     private final EventRepository eventRepository;
+    private final MachineRepository machineRepository;
 
-    public SessionService(SessionRepository sessionRepository, EventRepository eventRepository) {
+    public SessionService(SessionRepository sessionRepository, EventRepository eventRepository,
+                          MachineRepository machineRepository) {
         this.sessionRepository = sessionRepository;
         this.eventRepository = eventRepository;
+        this.machineRepository = machineRepository;
     }
 
     public void processSession(Session session) {
         try {
-
             Session onGoingSession = sessionRepository.getMachineLastOnGoingSession(session.getMachineId());
             if (onGoingSession != null) {
                 _closeSession(onGoingSession);
             }
             sessionRepository.save(session);
+            machineRepository.saveIfNotExists(session.getMachineId());
         } catch (Exception e) {
             LOGGER.error("Exception e : {}", e.getMessage());
         }

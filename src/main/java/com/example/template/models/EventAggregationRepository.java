@@ -7,11 +7,13 @@ import java.util.List;
 
 public interface EventAggregationRepository extends CrudRepository<EventAggregation, Integer> {
 
-    EventAggregation findBySessionIdAndEventTypeOrderByIdDesc(String sessionId, String eventType);
+    // There is only one single register by sessionId/eventType by table definition
+    EventAggregation findFirstBySessionIdAndEventType(String sessionId, String eventType);
 
+    List<EventAggregation> findBySessionId(String sessionId);
     public default EventAggregation getSessionEventAggregation(String sessionId, String eventType) {
         try {
-            return findBySessionIdAndEventTypeOrderByIdDesc(sessionId, eventType);
+            return findFirstBySessionIdAndEventType(sessionId, eventType);
         } catch(EntityNotFoundException notFoundError) {
             return null;
         }

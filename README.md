@@ -8,8 +8,18 @@
 - Private methods naming convention: I'm aware it is a "Pythionic way", but with our team we found extremely useful to identify private methods at first glance. I have not be able to find any defined policy for this methods in Java, I would guess this should be a team/company policy
 - On queries I did extensive use of JPA because they are simple, but we could think on using direct SQL sentences for performance reasons
 - Using instanceof is sometimes a code smell, but in this particular use case allows cleaner code
-- Wait on SQS queue will determine the frequency on the task execution
+- Wait on SQS queue will determine the frequency on the task execution, use task delay to ensure we read faster if there is data
+- IMPORTANT: events only has the sessionId, so we should assume this sessionId is unique and cannot be repeated across machines, otherwise the event received should have the machineId value
+- All tables with Integer ID as PK because this is very useful for data replication, DMS for example, without it the data replication gets more complicated
+- Get machines endpoint should have pagination
+- The tests on controllers are the integration tests
+- BigDecimal roundup half for 3 decimals
 
 # Pending
 - Error management policy not defined, we assume all events will be correct
 - Concurrency: "select for update" or REDIS (for example)
+
+# API calls
+curl -vS -X GET "http://localhost:8080/machines/list"
+curl -vS -X GET "http://localhost:8080/sessions/summary?machineId=123-456-789&sessionId=abc-def-ghi-jkm"
+curl -vS -X GET "http://localhost:8080/sessions/last?machineId=123-456-789"
