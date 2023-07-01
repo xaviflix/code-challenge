@@ -10,6 +10,9 @@ import java.util.List;
 
 @Service
 public class SqsService {
+
+    public static final int SQS_MAX_WAIT_SECONDS = 5;
+    public static final int SQS_MAX_MESSAGES_TO_READ = 10;
     private static final Logger LOGGER = LoggerFactory.getLogger(SqsService.class);
     private final AmazonSQS amazonSQS;
 
@@ -34,8 +37,8 @@ public class SqsService {
         ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest();
         GetQueueUrlResult queueUrlResult = amazonSQS.getQueueUrl(queueName);
         receiveMessageRequest.setQueueUrl(queueUrlResult.getQueueUrl());
-        receiveMessageRequest.setWaitTimeSeconds(5);
-        receiveMessageRequest.setMaxNumberOfMessages(5);
+        receiveMessageRequest.setWaitTimeSeconds(SQS_MAX_WAIT_SECONDS);
+        receiveMessageRequest.setMaxNumberOfMessages(SQS_MAX_MESSAGES_TO_READ);
         return amazonSQS.receiveMessage(receiveMessageRequest).getMessages();
     }
 

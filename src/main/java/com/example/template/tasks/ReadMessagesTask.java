@@ -22,6 +22,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReadMessagesTask {
 
+    public static final int READ_MESSAGES_TASK_FIXED_DELAY_MS = 1000;
+    public static final int READ_MESSAGES_TASK_INITIAL_DELAY_MS = 1000;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(EventService.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
@@ -30,13 +33,13 @@ public class ReadMessagesTask {
     private final SessionService sessionService;
 
     public ReadMessagesTask(AmazonSQS amazonSQS, SessionRepository sessionRepository, EventRepository eventRepository,
-                            EventAggregationRepository eventAggregationRepository) {
+                            EventAggregationRepository eventAggregationRepository, MachineRepository machineRepository) {
         this.sqsService = new SqsService(amazonSQS);
         this.eventService = new EventService(eventRepository, eventAggregationRepository);
-        this.sessionService = new SessionService(sessionRepository, eventRepository);
+        this.sessionService = new SessionService(sessionRepository, eventRepository, machineRepository);
     }
 
-    @Scheduled(initialDelay = 1000, fixedRate = 1000)
+    @Scheduled(initialDelay = READ_MESSAGES_TASK_INITIAL_DELAY_MS, fixedDelay = READ_MESSAGES_TASK_FIXED_DELAY_MS)
     public void readMessages() {
         LOGGER.info("Executing task ({})", dateFormat.format(new Date()));
         List<Message> messages =  sqsService.receiveMessages("events_queue");
@@ -49,7 +52,7 @@ public class ReadMessagesTask {
         });
         parsedObjects.forEach(parsedObject -> {
             if (parsedObject instanceof Event) { eventService.processEvent((Event)parsedObject); };
-            if (parsedObject instanceof Event) { sessionService.processSession((Session)parsedObject); };
+            if (parsedObject instanceof Session) { sessionService.processSession((Session)parsedObject); };
         });
     }
 }
