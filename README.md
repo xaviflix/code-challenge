@@ -14,10 +14,12 @@
 - Get machines endpoint should have pagination
 - The tests on controllers are the integration tests
 - BigDecimal roundup half for 3 decimals
+- IT are slow, so try to do flow-testing there to try to take advantage of the slow setup
 
 # Pending
 - Error management policy not defined, we assume all events will be correct
 - Concurrency: "select for update" or REDIS (for example)
+- Ensure scheduled task finish gracefully to avoid problems in deployments
 
 # API calls
 curl -vS -X GET "http://localhost:8080/machines/list"
