@@ -19,7 +19,7 @@ public class MachineController {
     @GetMapping(path="/list")
     public List<MachineApiModel> getAll() {
         Iterable<Machine> machinesList = machineRepository.findAll();
-        List<MachineApiModel> machinesApi = new ArrayList();
+        List<MachineApiModel> machinesApi = new ArrayList<>();
         machinesList.forEach(machine -> {
             machinesApi.add(new MachineApiModel(machine.getMachineId()));
         });

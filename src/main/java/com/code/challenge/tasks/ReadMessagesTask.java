@@ -42,7 +42,7 @@ public class ReadMessagesTask {
     public void readMessages() {
         LOGGER.info("Executing task ({})", dateFormat.format(new Date()));
         List<Message> messages =  sqsService.receiveMessages("events_queue");
-        List<Object> parsedObjects = new ArrayList<Object>();
+        List<Object> parsedObjects = new ArrayList<>();
         messages.forEach(message -> {
             LOGGER.info("Message body {} ({})", message.getBody(), dateFormat.format(new Date()));
             parsedObjects.addAll(JsonMessageParser.parseJsonMessage(message.getBody()));
@@ -50,8 +50,8 @@ public class ReadMessagesTask {
             LOGGER.info("Deleted from queue {} ({})", deleteResult, dateFormat.format(new Date()));
         });
         parsedObjects.forEach(parsedObject -> {
-            if (parsedObject instanceof Event) { eventService.processEvent((Event)parsedObject); };
-            if (parsedObject instanceof Session) { sessionService.processSession((Session)parsedObject); };
+            if (parsedObject instanceof Event) { eventService.processEvent((Event)parsedObject); }
+            if (parsedObject instanceof Session) { sessionService.processSession((Session)parsedObject); }
         });
     }
 }

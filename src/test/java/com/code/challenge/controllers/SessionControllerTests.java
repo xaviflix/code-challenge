@@ -26,7 +26,7 @@ class SessionControllerTests extends ControllerTests {
 	void when_session_and_events_exists_returns_correct_data() throws Exception{
 		String session1 = "{\"sessionId\": \"session-1\", \"machineId\": \"machine-1\", \"startAt\": 1688114297}";
 		String session2 = "{\"sessionId\": \"session-2\", \"machineId\": \"machine-2\", \"startAt\": 1688121497}";
-		String eventsSession1 = "{\"sessionId\": \"session-1\", \"events\": [{\"eventAt\": 1688114298, \"eventType\": \"drivenDistance\", \"numericEventValue\": 11.22},{\"eventAt\": 1688114299, \"eventType\": \"drivenDistance\", \"numericEventValue\": 11.22},{\"eventAt\": 1688114300, \"eventType\": \"consumedFuel\", \"numericEventValue\": 0.127}]}";
+		String eventsSession1 = "{\"sessionId\": \"session-1\", \"events\": [{\"eventAt\": 1688114298, \"eventType\": \"drivenDistance\", \"numericEventValue\": 11.22},{\"eventAt\": 1688114299, \"eventType\": \"drivenDistance\", \"numericEventValue\": 11.2209},{\"eventAt\": 1688114300, \"eventType\": \"consumedFuel\", \"numericEventValue\": 0.127}]}";
 		String eventsSession2 = "{\"sessionId\": \"session-2\", \"events\": [{\"eventAt\": 1688121498, \"eventType\": \"consumedFuel\", \"numericEventValue\": 1.23},{\"eventAt\": 1688121499, \"eventType\": \"drivenDistance\", \"numericEventValue\": 9.876},{\"eventAt\": 1688121500, \"eventType\": \"consumedFuel\", \"numericEventValue\": 4.56}]}";
 		String session3 = "{\"sessionId\": \"session-3\", \"machineId\": \"machine-1\", \"startAt\": 1688114301}";
 		sqsService.publishMessage("events_queue", session1);

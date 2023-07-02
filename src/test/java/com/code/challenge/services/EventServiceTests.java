@@ -47,19 +47,19 @@ public class EventServiceTests {
     void when_process_new_event_with_previous_aggregation() {
         // Mocks
         EventAggregation existingEventAggregation = EventAggregation.create(
-                "session-id-value", "event-type-value", new BigDecimal("10.20"), new Timestamp(1686057249));
+                "session-id-value", "event-type-value", new BigDecimal("10.201"), new Timestamp(1686057249));
         when(eventAggregationRepository.getSessionEventAggregation(any(String.class), any(String.class))).thenCallRealMethod();
         when(eventAggregationRepository.findFirstBySessionIdAndEventType(any(String.class), any(String.class))).thenReturn(existingEventAggregation);
 
         // When
         Event event = Event.create(
-                "session-id-value", "event-type-value", new BigDecimal("11.22"), new Timestamp(1688057249));
+                "session-id-value", "event-type-value", new BigDecimal("11.2233"), new Timestamp(1688057249));
         eventService.processEvent(event);
 
         // Then
         verify(eventAggregationRepository, times(1)).save(existingEventAggregation);
         verify(eventRepository, times(1)).save(event);
         assertEquals(existingEventAggregation.getUpdateAt(), event.getEventAt());
-        assertEquals(new BigDecimal("21.42"), existingEventAggregation.getAggregatedValue());
+        assertEquals(new BigDecimal("21.4243"), existingEventAggregation.getAggregatedValue());
     }
 }
