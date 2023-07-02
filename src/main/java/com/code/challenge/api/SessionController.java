@@ -28,7 +28,7 @@ public class SessionController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Session not found");
         } else {
             List<EventAggregation> eventAggregationList = eventAggregationRepository.findBySessionId(sessionId);
-            List<EventSummaryApiModel> eventsSummary = new ArrayList();
+            List<EventSummaryApiModel> eventsSummary = new ArrayList<>();
             eventAggregationList.forEach(eventAggregation -> {
                 eventsSummary.add(new EventSummaryApiModel(
                         eventAggregation.getEventType(),

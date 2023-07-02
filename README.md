@@ -15,6 +15,7 @@
 - The tests on controllers are the integration tests
 - BigDecimal roundup half for 3 decimals
 - IT are slow, so try to do flow-testing there to try to take advantage of the slow setup
+- Set DB scale to 2 decimals by Hibernate TBC/TBD
 
 # Pending
 - Error management policy not defined, we assume all events will be correct
@@ -23,5 +24,8 @@
 
 # API calls
 curl -vS -X GET "http://localhost:8080/machines/list"
-curl -vS -X GET "http://localhost:8080/sessions/summary?machineId=123-456-789&sessionId=abc-def-ghi-jkm"
-curl -vS -X GET "http://localhost:8080/sessions/last?machineId=123-456-789"
+curl -vS -X GET "http://localhost:8080/sessions/summary?sessionId=session-1&machineId=machine-1"
+curl -vS -X GET "http://localhost:8080/sessions/last?machineId=machine-1"
+curl -vS -X GET "http://localhost:8000/machines/list"
+curl -vS -X GET "http://localhost:8000/sessions/summary?sessionId=session-1&machineId=machine-1"
+curl -vS -X GET "http://localhost:8000/sessions/last?machineId=machine-1"

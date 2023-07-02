@@ -28,11 +28,11 @@ public class JsonMessageParser {
             switch (_objectType(jsonObject)) {
                 case SESSION_OBJECT -> { return _parseSession(jsonObject); }
                 case EVENT_OBJECT -> {return _parseEvent(jsonObject); }
-                default -> { return new ArrayList<Object>(); }
+                default -> { return new ArrayList<>(); }
             }
         } catch (Exception e) {
             LOGGER.error("Exception e : {}", e.getMessage());
-            return new ArrayList<Object>();
+            return new ArrayList<>();
         }
     }
 
@@ -50,7 +50,7 @@ public class JsonMessageParser {
     }
 
     private static List<Object> _parseSession(JSONObject jsonObject) {
-        List<Object> sessionList = new ArrayList<Object>();
+        List<Object> sessionList = new ArrayList<>();
         sessionList.add(
                 Session.create(
                         jsonObject.optString("sessionId"),
@@ -62,7 +62,7 @@ public class JsonMessageParser {
     }
 
     private static List<Object> _parseEvent(JSONObject jsonObject) {
-        List<Object> eventList = new ArrayList<Object>();
+        List<Object> eventList = new ArrayList<>();
         String sessionId = jsonObject.optString("sessionId");
         JSONArray jsonEventsList = jsonObject.getJSONArray("events");
         jsonEventsList.forEach((jsonEvent) -> {
@@ -71,7 +71,7 @@ public class JsonMessageParser {
                     Event.create(
                             sessionId,
                             jsonEventObject.optString("eventType"),
-                            jsonEventObject.optBigDecimal("numericEventValue", new BigDecimal(0.0)),
+                            jsonEventObject.optBigDecimal("numericEventValue", new BigDecimal("0.0")),
                             new Timestamp(((long)jsonEventObject.optInt("eventAt")*1000))
                     )
             );

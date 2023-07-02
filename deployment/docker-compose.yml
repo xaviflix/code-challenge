@@ -1,37 +1,44 @@
-version: "3"
+name: code-challenge-containers
 
 services:
   application:
-    image: code-challenge
+    image: code-challenge-app
+    profiles: ["app-only", "app-with-infra"]
     build:
       context: .
       dockerfile: Dockerfile
     container_name: application
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/code_challenge
-      SQS_ENDPOINT_CONFIGURATION: http://event-queues:4566
+      SQS_ENDPOINT_CONFIGURATION: http://sqs-queues:4566
     ports:
-      - 8000:8080
-    restart: always
-    depends_on:
-    - database
-    - event-queues
+      - "8000:8080"
+    networks:
+      - database-network
+      - sqs-queues-network
+    restart: on-failure
   database:
     image: mysql:5.7
+    profiles: ["infra-only", "app-with-infra"]
     platform: linux/amd64
     ports:
-      - 3310:3306
+      - "3310:3306"
+    networks:
+      - database-network
     container_name: database
     environment:
       - MYSQL_ROOT_PASSWORD=adminpassword
       - MYSQL_DATABASE=code_challenge
       - MYSQL_USER=codechallengeuser
       - MYSQL_PASSWORD=codechallengepassword
-  event-queues:
+  sqs-queues:
     image: localstack/localstack
+    profiles: ["infra-only", "app-with-infra"]
     ports:
-      - 4566:4566
-    container_name: event-queues
+      - "4566:4566"
+    networks:
+      - sqs-queues-network
+    container_name: sqs-queues
     environment:
       - SERVICES=sqs
       - DEBUG=1
@@ -42,3 +49,6 @@ services:
       - /tmp/localstack:/tmp/localstack
       - /var/run/docker.sock:/var/run/docker.sock
 
+networks:
+  sqs-queues-network:
+  database-network:
